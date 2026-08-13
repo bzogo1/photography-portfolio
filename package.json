@@ -4,6 +4,9 @@
   "description": "A jekyll website for photographer cum developer",
   "main": "npmfile.js",
   "scripts": {
+    "build": "bundle exec jekyll build",
+    "dev": "bundle exec jekyll serve --livereload",
+    "start": "bundle exec jekyll serve --host 0.0.0.0 --port 3000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
