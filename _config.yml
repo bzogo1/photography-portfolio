@@ -14,13 +14,12 @@ header:
  title: "Photography"
  subtitle: "by Bogdan Zogovic"
 footer:
- name: "Hey there my name is Bogdan"
- bio: "I am a software developer and a tech aficionado. Love making teeny tiny apps solving tiny problems in life and now learning photography."
+ name: "Hey there, my name is Bogdan"
+ bio: "I am a photographer and software developer"
  github: ""
-web_design: "AJ"
 
 social_urls:
-  tiktok: "https://www.tiktok.com/bz.photography"
+  tiktok: "https://www.tiktok.com/@photography.bz"
 
 # Configure which exif data to display
 # Tag is the actual exif tag, icon is a fontawesome icon. Use JSON notation without line breaks
