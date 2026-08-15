@@ -46,23 +46,23 @@ gulp.task('resize-images', async function () {
         const ext = path.extname(fileName).toLowerCase();
 
         const fullImage = sharp(sourcePath)
-            .resize({ width: 1800, fit: 'inside', withoutEnlargement: true })
+            .resize({ width: 2200, fit: 'inside', withoutEnlargement: true })
             .withMetadata();
 
         if (ext === '.png') {
-            await fullImage.png({ quality: 90, compressionLevel: 9 }).toFile(fullTarget);
+            await fullImage.png({ quality: 95, compressionLevel: 9 }).toFile(fullTarget);
         } else {
-            await fullImage.jpeg({ quality: 92, mozjpeg: true, progressive: true }).toFile(fullTarget);
+            await fullImage.jpeg({ quality: 96, mozjpeg: true, progressive: true, chromaSubsampling: '4:4:4' }).toFile(fullTarget);
         }
 
         const thumbImage = sharp(sourcePath)
-            .resize({ width: 900, fit: 'inside', withoutEnlargement: true })
+            .resize({ width: 1400, fit: 'inside', withoutEnlargement: true })
             .withMetadata();
 
         if (ext === '.png') {
-            await thumbImage.png({ quality: 92, compressionLevel: 9 }).toFile(thumbTarget);
+            await thumbImage.png({ quality: 96, compressionLevel: 9 }).toFile(thumbTarget);
         } else {
-            await thumbImage.jpeg({ quality: 92, mozjpeg: true, progressive: true }).toFile(thumbTarget);
+            await thumbImage.jpeg({ quality: 96, mozjpeg: true, progressive: true, chromaSubsampling: '4:4:4' }).toFile(thumbTarget);
         }
     }
 });
