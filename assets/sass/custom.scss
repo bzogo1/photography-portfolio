@@ -1,6 +1,11 @@
 @import 'libs/vars';
 @import 'libs/functions';
 
+/* 75% Zoom for better layout */
+body {
+	zoom: 75%;
+}
+
 /* Utilities */
 .text-fg {
 	color: _palette(fg);
