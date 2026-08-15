@@ -43,14 +43,27 @@ gulp.task('resize-images', async function () {
         const sourcePath = path.join(sourceImageDir, fileName);
         const fullTarget = path.join(fullImageDir, fileName);
         const thumbTarget = path.join(thumbImageDir, fileName);
+        const ext = path.extname(fileName).toLowerCase();
 
-        await sharp(sourcePath)
-            .resize({ width: 1600, fit: 'inside', withoutEnlargement: true })
-            .toFile(fullTarget);
+        const fullImage = sharp(sourcePath)
+            .resize({ width: 1800, fit: 'inside', withoutEnlargement: true })
+            .withMetadata();
 
-        await sharp(sourcePath)
-            .resize({ width: 500, fit: 'inside', withoutEnlargement: true })
-            .toFile(thumbTarget);
+        if (ext === '.png') {
+            await fullImage.png({ quality: 90, compressionLevel: 9 }).toFile(fullTarget);
+        } else {
+            await fullImage.jpeg({ quality: 92, mozjpeg: true, progressive: true }).toFile(fullTarget);
+        }
+
+        const thumbImage = sharp(sourcePath)
+            .resize({ width: 900, fit: 'inside', withoutEnlargement: true })
+            .withMetadata();
+
+        if (ext === '.png') {
+            await thumbImage.png({ quality: 92, compressionLevel: 9 }).toFile(thumbTarget);
+        } else {
+            await thumbImage.jpeg({ quality: 92, mozjpeg: true, progressive: true }).toFile(thumbTarget);
+        }
     }
 });
 
