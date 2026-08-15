@@ -17,15 +17,28 @@ layout: default
 
     <!-- Main -->
     <div id="main" data-exif='{{ site.exif }}'>
+        {% assign horizontal_images = "IMG_2865,IMG_2877,IMG_2882,IMG_3068,IMG_4137,IMG_4186,IMG_4257,IMG_4291,IMG_4311,IMG_4319,IMG_4409,IMG_4464,IMG_4513,IMG_4546,IMG_4559,IMG_4632,IMG_4649,IMG_4653,IMG_4723,IMG_5004" | split: "," %}
+        
         {% for image in site.static_files %}
         {% if image.path contains 'fulls' %}
-        <article class="thumb">
-            <a href="{{ site.baseurl }}{{ site.image_fulls_loc }}/{{ image.name }}" class="image">
-                <img src="{{ site.baseurl }}{{ site.image_thumbs_loc }}/{{ image.name }}" alt=""
-                     data-name="{{ image.name }}"/></a>
-            <!--<h2></h2>
-            <p></p>-->
-        </article>
+            {% assign is_horizontal = false %}
+            {% for h_img in horizontal_images %}
+                {% if image.name contains h_img %}
+                    {% assign is_horizontal = true %}
+                {% endif %}
+            {% endfor %}
+            
+            {% if is_horizontal %}
+                <article class="thumb thumb--horizontal">
+            {% else %}
+                <article class="thumb thumb--vertical">
+            {% endif %}
+                <a href="{{ site.baseurl }}{{ site.image_fulls_loc }}/{{ image.name }}" class="image">
+                    <img src="{{ site.baseurl }}{{ site.image_thumbs_loc }}/{{ image.name }}" alt=""
+                         data-name="{{ image.name }}"/></a>
+                <!--<h2></h2>
+                <p></p>-->
+            </article>
         {% endif %}
         {% endfor %}
     </div>

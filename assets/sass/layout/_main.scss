@@ -13,8 +13,9 @@
 			'-ms-filter #{_duration(panel)} ease',
 			'filter #{_duration(panel)} ease'
 		));
-		@include vendor('display', 'flex');
-		@include vendor('flex-wrap', 'wrap');
+		@include vendor('display', 'grid');
+		@include vendor('grid-auto-flow', 'dense');
+		@include vendor('gap', '0.5em');
 		-webkit-tap-highlight-color: rgba(255,255,255,0);
 
 		.thumb {
@@ -112,17 +113,29 @@
 			$baseDelay: _duration(header) - 0.5;
 			$defaultDelay: $baseDelay + (((($rows * $columns) + 1) * 1.5) * _duration(thumb));
 
+			@include vendor('grid-template-columns', 'repeat(' + $columns + ', 1fr)');
+			@include vendor('grid-auto-rows', 'minmax(' + $minHeight + ', calc(#{100vh / ($rows + $pad)} - #{_size(header) / $rows}))');
+
 			.thumb {
 				@include vendor('transition-delay', '#{$defaultDelay}');
-				height: calc(#{100vh / ($rows + $pad)} - #{_size(header) / $rows});
-				min-height: $minHeight;
-				width: (100% / $columns);
+				height: 100%;
+				width: 100%;
 
 				@for $i from 1 through (($rows * $columns) * 1.5) {
 					&:nth-child(#{$i}) {
 						@include vendor('transition-delay', '#{$baseDelay + ($i * _duration(thumb))}');
 					}
 				}
+			}
+
+			.thumb--vertical {
+				@include vendor('grid-column', 'span 1');
+				@include vendor('grid-row', 'span 2');
+			}
+
+			.thumb--horizontal {
+				@include vendor('grid-column', 'span 1');
+				@include vendor('grid-row', 'span 1');
 			}
 		}
 
