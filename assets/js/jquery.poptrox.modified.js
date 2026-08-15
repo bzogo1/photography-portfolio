@@ -157,9 +157,9 @@
 							$caption
 								.css('position', 'absolute')
 								.css('left', '0')
-								.css('bottom', '0')
+								.css('top', '0')
 								.css('width', '100%')
-								.css('text-align', 'center')
+								.css('text-align', 'left')
 								.css('height', settings.popupCaptionHeight + 'px')
 								.css('line-height', settings.popupCaptionHeight + 'px');
 
