@@ -1,5 +1,4 @@
 import gulp from 'gulp';
-import imageResize from 'gulp-image-resize';
 import dartSass from 'sass';
 import gulpSass from 'gulp-sass';
 import uglify from 'gulp-uglify';
@@ -7,10 +6,16 @@ import rename from 'gulp-rename';
 import filter from 'gulp-filter';
 import path from 'path';
 import del from 'del';
+import sharp from 'sharp';
+import fs from 'fs';
+import { promises as fsPromises } from 'fs';
 
 const sass = gulpSass(dartSass);
 const cssSourceGlob = './assets/sass/**/*.scss';
 const cssOutputDir = './assets/css';
+const sourceImageDir = './photos';
+const fullImageDir = './images/fulls';
+const thumbImageDir = './images/thumbs';
 const generatedCssFiles = [
     `${cssOutputDir}/custom.min.css`,
     `${cssOutputDir}/main.min.css`,
@@ -18,21 +23,35 @@ const generatedCssFiles = [
 ];
 
 gulp.task('delete', function () {
-    return del(['images/*.*']);
+    return del([
+        `${fullImageDir}/*.*`,
+        `${thumbImageDir}/*.*`
+    ]);
 });
 
-gulp.task('resize-images', function () {
-    return gulp.src('images/*.*')
-        .pipe(imageResize({
-            width: 1024,
-            imageMagick: true
-        }))
-        .pipe(gulp.dest('images/fulls'))
-        .pipe(imageResize({
-            width: 512,
-            imageMagick: true
-        }))
-        .pipe(gulp.dest('images/thumbs'));
+gulp.task('resize-images', async function () {
+    await fsPromises.mkdir(fullImageDir, { recursive: true });
+    await fsPromises.mkdir(thumbImageDir, { recursive: true });
+
+    const files = await fsPromises.readdir(sourceImageDir, { withFileTypes: true });
+    const imageFiles = files
+        .filter((entry) => entry.isFile())
+        .map((entry) => entry.name)
+        .filter((name) => /\.(jpe?g|png|gif|webp)$/i.test(name));
+
+    for (const fileName of imageFiles) {
+        const sourcePath = path.join(sourceImageDir, fileName);
+        const fullTarget = path.join(fullImageDir, fileName);
+        const thumbTarget = path.join(thumbImageDir, fileName);
+
+        await sharp(sourcePath)
+            .resize({ width: 1600, fit: 'inside', withoutEnlargement: true })
+            .toFile(fullTarget);
+
+        await sharp(sourcePath)
+            .resize({ width: 500, fit: 'inside', withoutEnlargement: true })
+            .toFile(thumbTarget);
+    }
 });
 
 // clear previously generated css
